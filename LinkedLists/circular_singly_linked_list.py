@@ -5,7 +5,7 @@ class Node:
         self.next = None
 
 
-class SinglyLinkedList:
+class CircularSinglyLinkedList:
 
     def __init__(self):
         self.head = None
@@ -16,66 +16,64 @@ class SinglyLinkedList:
         while node:
             yield node
             node = node.next
+            if node == self.tail.next:
+                break
 
     def insert(self, value, index):
         new_node = Node(value)
-        #   list is empty
+        # list is empty
         if self.head is None:
             self.head = new_node
             self.tail = new_node
-        #   insert at beginning
+            self.tail.next = new_node
         else:
+            # insert node at beginning
             if index == 0:
                 new_node.next = self.head
                 self.head = new_node
+                self.tail.next = new_node
+            # insert node at end
             elif index == -1:
-                # new_node.next = None
+                new_node.next = self.tail.next
                 self.tail.next = new_node
                 self.tail = new_node
-            #     insert at index
             else:
                 temp_node = self.head
                 i = 0
                 while i < index - 1:
                     temp_node = temp_node.next
                     i += 1
+                print("index = {}".format(index))
+                print("temp node value = {}".format(temp_node.value))
+                print("new node value = {}".format(new_node.value))
                 new_node.next = temp_node.next
                 temp_node.next = new_node
 
     def delete(self, index):
         if self.head is None:
-            print("The list is empty")
+            print("List is empty")
         else:
             # delete from beginning
             if index == 0:
-                # if only one element in list
                 if self.head == self.tail:
                     self.head = None
                     self.tail = None
                 else:
                     self.head = self.head.next
-            # delete from end
+                    self.tail.next = self.head
             elif index == -1:
-                # if only one element in list
-                if self.head == self.tail:
-                    self.head = None
-                    self.tail = None
-                else:
-                    previous_node = self.head
-                    while previous_node.next is not self.tail:
-                        previous_node = previous_node.next
-                    previous_node.next = None
-                    self.tail = previous_node
-            #      delete from index
+                penultimate = self.head
+                while penultimate.next != self.tail:
+                    penultimate = penultimate.next
+                penultimate.next = self.head
+                self.tail = penultimate
             else:
-                previous_node = self.head
+                previous = self.head
                 i = 0
                 while i < index - 1:
-                    previous_node = previous_node.next
+                    previous = previous.next
                     i += 1
-                node_to_delete = previous_node.next
-                print("{}, {}".format(previous_node.value, node_to_delete.value))
-                previous_node.next = node_to_delete.next
+                previous.next = previous.next.next
 
     def delete_list(self):
         if self.head is None:
@@ -93,6 +91,8 @@ class SinglyLinkedList:
             while temp_node:
                 print(temp_node.value)
                 temp_node = temp_node.next
+                if temp_node == self.tail.next:
+                    break
 
     def find(self, value):
         if self.head is None:
@@ -101,31 +101,25 @@ class SinglyLinkedList:
             temp_node = self.head
             while temp_node:
                 if temp_node.value == value:
-                    print("Item with value {} exists".format(value))
+                    print("Value exists in list")
                     break
                 temp_node = temp_node.next
-            else:
-                print("Item with value {} does not exist".format(value))
+                if temp_node == self.tail.next:
+                    print("Value not found in list")
+                    break
 
 
-singly_linked_list = SinglyLinkedList()
-singly_linked_list.insert(1, -1)
-singly_linked_list.insert(2, -1)
-singly_linked_list.insert(3, -1)
-singly_linked_list.insert(4, -1)
-singly_linked_list.insert(0, 0)
-singly_linked_list.insert(99, 3)
-singly_linked_list.insert(111, 1)
-singly_linked_list.traverse()
-print([node.value for node in singly_linked_list])
-singly_linked_list.find(99)
-singly_linked_list.find(222)
-print([node.value for node in singly_linked_list])
-singly_linked_list.delete(4)
-print([node.value for node in singly_linked_list])
-singly_linked_list.delete_list()
-new_list = SinglyLinkedList()
-new_list.insert(5, 0)
-new_list.traverse()
-new_list.delete(-1)
-new_list.traverse()
+circular_singly_linked_list = CircularSinglyLinkedList()
+circular_singly_linked_list.insert(1, 0)
+circular_singly_linked_list.insert(2, 0)
+circular_singly_linked_list.insert(3, 0)
+circular_singly_linked_list.insert(4, 0)
+print([node.value for node in circular_singly_linked_list])
+circular_singly_linked_list.traverse()
+circular_singly_linked_list.find(5)
+print("*" * 10)
+print([node.value for node in circular_singly_linked_list])
+circular_singly_linked_list.delete(2)
+print([node.value for node in circular_singly_linked_list])
+circular_singly_linked_list.delete(1)
+print([node.value for node in circular_singly_linked_list])
