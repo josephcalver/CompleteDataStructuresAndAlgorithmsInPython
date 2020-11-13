@@ -52,6 +52,12 @@ class LinkedList:
         else:
             return self.head.value
 
+    def is_empty(self):
+        if self.head is None:
+            return True
+        else:
+            return False
+
 
 class Queue:
 
@@ -76,6 +82,9 @@ class Queue:
 
     def peek(self):
         return self.queue.get()
+
+    def is_empty(self):
+        return self.queue.is_empty()
 
 
 queue = Queue()
